@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <title>Application Review Portal</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 40px; background-color: #f8f9fa; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        h2 { color: #333; margin-bottom: 20px; border-bottom: 2px solid #eaeaea; padding-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; text-align: left; }
+        th, td { padding: 12px 15px; border-bottom: 1px solid #dee2e6; }
+        th { background-color: #f1f3f5; color: #495057; font-weight: 600; }
+        tr:hover { background-color: #f8f9fa; }
+
+        /* Status Badges */
+        .badge { padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; text-transform: uppercase; }
+        .status-PENDING { background-color: #fff3cd; color: #856404; }
+        .status-APPROVED { background-color: #d4edda; color: #155724; }
+        .status-REJECTED { background-color: #f8d7da; color: #721c24; }
+
+        /* Action Utility Layout components */
+        .action-container { display: flex; gap: 8px; }
+        .btn { border: none; padding: 6px 12px; border-radius: 4px; font-size: 13px; font-weight: bold; cursor: pointer; text-decoration: none; color: white; transition: opacity 0.2s; }
+        .btn:hover { opacity: 0.85; }
+        .btn-approve { background-color: #28a745; }
+        .btn-reject { background-color: #dc3545; }
+        form { margin: 0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Unemployment Program Evaluation Desk</h2>
+
+    <table>
+        <thead>
+        <tr>
+            <th>App ID</th>
+            <th>Worker ID</th>
+            <th>Submission Date</th>
+            <th>Reasoning Details</th>
+            <th>Workflow Status</th>
+            <th>Evaluation Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Empty handling alternative state -->
+        <tr th:if="${#lists.isEmpty(applications)}">
+            <td colspan="6" style="text-align: center; color: #777;">No applications submitted yet.</td>
+        </tr>
+        <!-- Iterative generation logic loop -->
+        <tr th:each="app : ${applications}">
+            <td th:text="${app.applicationID}">1</td>
+            <td th:text="${app.workerId}">102</td>
+            <td th:text="${#dates.format(app.applicationDate, 'yyyy-MM-dd HH:mm')}">2026-10-08</td>
+            <td th:text="${app.reasonForUnemployment}">Layoff structure</td>
+            <td>
+                <span th:class="'badge status-' + ${app.status}" th:text="${app.status}">PENDING</span>
+            </td>
+            <td>
+                <!-- Control visibility contextually using Thymeleaf logic blocks -->
+                <div class="action-container" th:if="${app.status == 'PENDING'}">
+                    <form th:action="@{/ui/applications/review/{id}/approve(id=${app.applicationID})}" method="POST">
+                        <button type="submit" class="btn btn-approve">Approve</button>
+                    </form>
+                    <form th:action="@{/ui/applications/review/{id}/reject(id=${app.applicationID})}" method="POST">
+                        <button type="submit" class="btn btn-reject">Reject</button>
+                    </form>
+                </div>
+                <span th:unless="${app.status == 'PENDING'}" style="color: #bbb; font-size: 13px; font-style: italic;">Evaluated</span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

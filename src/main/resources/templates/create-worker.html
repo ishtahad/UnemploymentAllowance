@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <title>Register New Worker</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 50px; background-color: #f4f7f6; }
+        .form-container { background: white; padding: 30px; border-radius: 8px; max-width: 400px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
+        button:hover { background-color: #218838; }
+        .message { margin-top: 15px; padding: 10px; border-radius: 4px; font-weight: bold; text-align: center; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Register New Worker</h2>
+
+    <!-- Success / Error Status Alerts -->
+    <div th:if="${successMessage}" class="message success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="message error" th:text="${errorMessage}"></div>
+
+    <!-- The Registration Form -->
+    <form th:action="@{/workers/create}" th:object="${worker}" method="POST">
+        <div class="form-group">
+            <label>Full Name:</label>
+            <input type="text" th:field="*{workerName}" placeholder="Enter full name" required />
+        </div>
+        <div class="form-group">
+            <label>National ID Number:</label>
+            <input type="text" th:field="*{nationalIdNumber}" placeholder="Enter NID" required />
+        </div>
+        <div class="form-group">
+            <label>Mobile Number:</label>
+            <input type="text" th:field="*{mobileNUmber}" placeholder="Enter mobile number" required />
+        </div>
+        <button type="submit">Save Worker</button>
+    </form>
+</div>
+
+</body>
+</html>

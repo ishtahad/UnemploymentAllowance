@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <title>Approved Applications Report</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 40px; background-color: #f4f6f9; }
+        .report-box { background: white; padding: 30px; border-radius: 8px; max-width: 950px; margin: 0 auto; box-shadow: 0 4px 10px rgba(0,0,0,0.06); }
+        .header-section { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #0056b3; padding-bottom: 15px; margin-bottom: 20px; }
+        h2 { margin: 0; color: #333; }
+        .stamp { font-size: 13px; color: #666; font-style: italic; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 12px; border-bottom: 1px solid #e0e0e0; }
+        th { background-color: #0056b3; color: white; text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .badge-approved { background-color: #d4edda; color: #155724; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="report-box">
+    <div class="header-section">
+        <h2>Unemployment Program Approved Applications</h2>
+        <span class="stamp">Generated: Live Document</span>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Application ID</th>
+            <th>Worker ID</th>
+            <th>National ID (NID)</th>
+            <th>Application Date</th>
+            <th>Approval Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${#lists.isEmpty(reportData)}">
+            <td colspan="5" style="text-align: center; color: #888;">No approved applications exist inside the ledger system.</td>
+        </tr>
+        <tr th:each="row : ${reportData}">
+            <td th:text="${row.applicationId}" style="font-weight: bold; color: #0056b3;">1001</td>
+            <td th:text="${row.workerId}">52</td>
+            <td th:text="${row.nationalId}">NID987654321</td>
+            <td th:text="${#dates.format(row.applicationDate, 'yyyy-MM-dd HH:mm')}">2026-10-08 14:00</td>
+            <td>
+                <span class="badge-approved" th:text="${row.status}">APPROVED</span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
